@@ -22,8 +22,8 @@ DELETE FROM subscriber WHERE id_subscriber > 3;
 
 # 2.3 Очистить таблицу
 TRUNCATE subscriber;
-#TRUNCATE delivery;
-#TRUNCATE periodical;
+TRUNCATE delivery;
+TRUNCATE periodical;
 
 # 3 UPDATE
 # 3.1 Все записей
