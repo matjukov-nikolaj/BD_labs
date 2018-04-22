@@ -1,0 +1,75 @@
+USE lab5;
+
+# Выдать информацию по всем заказам лекарства “Кордерон” компании “Аргус” с указанием названий аптек, дат, объема заказов.
+SELECT
+  pharmacy.name,
+  drug_order.date_order,
+  drug_order.amount
+FROM drug_order
+  LEFT JOIN pharmacy ON drug_order.id_pharmacy = pharmacy.id
+  LEFT JOIN production ON drug_order.id_production = production.id
+  LEFT JOIN pharmaceutical_company ON production.id_company = pharmaceutical_company.id
+  LEFT JOIN medicine ON production.id_medicine = medicine.id
+WHERE medicine.name = 'Кордерон' AND pharmaceutical_company.name = 'Аргус';
+
+# Дать список лекарств компании “Фарма”, на которые не были сделаны заказы до 1.05.12.
+# лек с 1 название -> будет ошибка
+# не совсем верное условие с 1.05.12 HAVING ?
+SELECT
+  production.id_company,
+  medicine.name,
+  drug_order.date_order
+#   MIN(drug_order.date_order)
+FROM drug_order
+  RIGHT JOIN production ON drug_order.id_production = production.id
+#   LEFT JOIN production ON drug_order.id_production = production.id
+  LEFT JOIN pharmaceutical_company ON production.id_company = pharmaceutical_company.id
+  LEFT JOIN medicine ON production.id_medicine = medicine.id
+WHERE pharmaceutical_company.name = 'Фарма' AND drug_order.date_order is null
+GROUP BY production.id_company, medicine.name,  drug_order.date_order;
+# HAVING drug_order.date_order is null;
+# GROUP BY production.id_company, medicine.id, medicine.name
+# HAVING MIN(drug_order.date_order);
+# HAVING MIN(drug_order.date_order) > '2012-05-01 00:00:00';
+# лекарство где не было заказов
+
+# Дать минимальный и максимальный баллы лекарств каждой фирмы, которая производит не менее 5 препаратов, с указанием названий фирмы и лекарства.
+# COUNT, GROUP BY  SELECT
+SELECT
+  pharmaceutical_company.name as company_name,
+  pharmaceutical_company.id as company_id,
+  MIN(production.rating),
+  MAX(production.rating)
+FROM drug_order
+  LEFT JOIN production ON drug_order.id_production = production.id
+  LEFT JOIN medicine ON production.id_medicine = medicine.id
+  LEFT JOIN pharmaceutical_company ON production.id_company = pharmaceutical_company.id
+GROUP BY company_id, company_name
+HAVING COUNT(drug_order.amount) > 5;
+
+
+# Дать списки сделавших заказы аптек по всем дилерам компании “Гедеон Рихтер”. Если у дилера нет заказов, в названии аптеки проставить NULL.
+SELECT
+  pharmacy.name,
+  pharmaceutical_company.name
+FROM company_dealer
+  LEFT JOIN pharmaceutical_company ON pharmaceutical_company.id = company_dealer.id_company
+  LEFT JOIN drug_order  ON company_dealer.id = drug_order.id_dealer
+  LEFT JOIN pharmacy ON pharmacy.id = drug_order.id_pharmacy
+WHERE pharmaceutical_company.name = 'Гедеон Рихтер';
+
+#Уменьшить на 20% стоимость всех лекарств, если она превышает 3000, а длительность лечения не более 7 дней.
+SELECT *
+FROM production
+  INNER JOIN medicine ON production.id_medicine = medicine.id
+WHERE production.price > 3000 AND medicine.treatmenth_length < 7;
+
+UPDATE production
+  INNER JOIN medicine ON production.id_medicine = medicine.id
+SET production.price = production.price * 0.8
+WHERE production.price > 3000 AND medicine.treatmenth_length < 7;
+
+# SELECT *
+# FROM production
+#   INNER JOIN medicine ON production.id_medicine = medicine.id
+# WHERE production.price > 3000 AND medicine.treatmenth_length < 7;
