@@ -101,6 +101,7 @@ INSERT INTO booking (id_client, booking_date) VALUES (3, '2012-04-23');
 INSERT INTO booking (id_client, booking_date) VALUES (4, '2012-05-30');
 INSERT INTO booking (id_client, booking_date) VALUES (1, '2012-01-23');
 INSERT INTO booking (id_client, booking_date) VALUES (2, '2012-04-23');
+INSERT INTO booking (id_client, booking_date) VALUES (3, '2012-04-12');
 
 CREATE TABLE IF NOT EXISTS room_in_booking (
   id                 INT(11) NOT NULL AUTO_INCREMENT,
@@ -124,8 +125,10 @@ VALUES (2, 2, '2012-05-13', '2012-06-23');
 INSERT INTO room_in_booking (id_booking, id_room, arrival_date, departure_date)
 VALUES (3, 3, '2012-02-23', '2012-04-30');
 INSERT INTO room_in_booking (id_booking, id_room, arrival_date, departure_date)
-VALUES (4, 4, '2012-05-30', '2012-06-30');
+VALUES (4, 4, '2012-05-15', '2012-05-28');
 INSERT INTO room_in_booking (id_booking, id_room, arrival_date, departure_date)
 VALUES (5, 5, '2012-05-13', '2012-06-23');
 INSERT INTO room_in_booking (id_booking, id_room, arrival_date, departure_date)
 VALUES (6, 6, '2012-02-23', '2012-04-30');
+INSERT INTO room_in_booking (id_booking, id_room, arrival_date, departure_date)
+VALUES (7, 3, '2012-04-13', '2012-04-15');
